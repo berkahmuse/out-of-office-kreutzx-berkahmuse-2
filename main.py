@@ -20,6 +20,12 @@ def main() -> None:
     os.makedirs("/output", exist_ok=True)
     with open("/output/entry.txt", "w", encoding="utf-8", newline="") as f:
         f.write(ENTRY)
+    # Read back and verify the written file is exactly the entry: no
+    # trailing newline, no encoding surprise, byte-identical every run.
+    with open("/output/entry.txt", "r", encoding="utf-8", newline="") as f:
+        written = f.read()
+    assert written == ENTRY, "read-back mismatch"
+    assert len(written.encode("utf-8")) == len(ENTRY.encode("utf-8"))
 
 
 if __name__ == "__main__":
